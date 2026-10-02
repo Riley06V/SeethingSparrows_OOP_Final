@@ -10,3 +10,5 @@ lxml
 requests
 pdoc
 kattis-cli
+pygame
+pymunk
