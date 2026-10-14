@@ -1,0 +1,22 @@
+@startuml development
+
+title Seething Sparrows — Development View
+
+package "src/" {
+    [main.py] --> [game.py] : initializes singleton game
+    [game.py] --> [level_generator.py] : uses iterator pattern
+    [game.py] --> [collision_handler.py] : processes collisions & slingshot
+    [level_generator.py] --> [objects.py] : uses factory pattern for entities
+    [collision_handler.py] --> [objects.py] : updates object states
+}
+
+package "External Libraries" {
+    [pygame]
+    [pymunk]
+}
+
+[game.py] --> [pygame] : manages loop, window & rendering
+[objects.py] --> [pymunk] : wraps pymunk bodies & shapes
+[collision_handler.py] --> [pymunk] : handles physics collisions & space
+
+@enduml
