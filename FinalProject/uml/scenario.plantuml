@@ -4,8 +4,8 @@
 title Seething Sparrows — Scenario View
 
 actor User
-participant "Game\n(Singleton)" as Game
-participant "Level Generator\n(Iterator)" as Level
+participant "Game" as Game
+participant "Level Generator" as Level
 participant "Collision Handler" as Collisions
 participant "Ball\n(Object)" as Bird
 participant "Pymunk Space" as Space
@@ -14,22 +14,22 @@ User -> Game: Initializes game
 Game -> Level: Request first level
 Level --> Game: Yield level entities
 
-loop Each Level
+loop Level (Goal: 10-15)
     User -> Game: Drag & release slingshot
     Game -> Bird: Apply impulse from slingshot
-    Bird -> Space: Update physics body
+    Bird -> Space: Update physics on bird
 
     loop Game Loop (60 FPS)
-        Game -> Space: space.step(dt)
+        Game -> Space: Move forward one frame
         Space --> Collisions: Detect collision
-        Collisions -> Bird: Update velocity, position
-        Collisions -> Game: Update score & check win
-        Game --> User: Render the next frame
+        Collisions -> Bird: Update velocity and position
+        Collisions -> Game: Update score and check win
+        Game --> User: Render next frame
     end
 
     User -> Game: Selects next level or retry
     Game -> Level: Request next level
-    Level --> Game: Yield next level entities
+    Level --> Game: Yield level entities
 end
 
 @enduml
