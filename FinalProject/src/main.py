@@ -24,12 +24,12 @@ def main():
 
     # Physics space
     space = pymunk.Space()
-    space.gravity = (0.0, 980.0)
-    
-    # Enable sleeping so objects fully freeze and stop creeping when they come to rest
+    space.gravity = (0.0, 980.0) # 980 px/s^2 vertically
+
+    # Enable sleeping so objects fully stop
     space.sleep_time_threshold = 0.5
 
-    # Static boundaries to keep everything inside the window
+    # Boundaries to keep everything inside the window
     static_body = pymunk.Body(body_type=pymunk.Body.STATIC)
     walls = [
         pymunk.Segment(static_body, (0, HEIGHT), (WIDTH, HEIGHT), 5),  # Floor
