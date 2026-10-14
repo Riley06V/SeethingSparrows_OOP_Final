@@ -10,20 +10,14 @@ RUN apt update \
 # Install Java and Graphviz for plantuml
 RUN apt install default-jre graphviz -y
 
-# Install SDL dependencies for pygame
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libsdl2-dev \
-    libsdl2-image-dev \
-    libsdl2-mixer-dev \
-    libsdl2-ttf-dev \
-    libfreetype6-dev \
-    libportmidi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 ARG USER=user
 ARG UID=1000
 ARG GID=1000
+
+ENV SDL_VIDEODRIVER=dummy
+ENV SDL_AUDIODRIVER=dummy
+ENV XDG_RUNTIME_DIR=/tmp/runtime-user
+RUN mkdir -p /tmp/runtime-user && chown ${UID}:${GID} /tmp/runtime-user && chmod 700 /tmp/runtime-user
 
 # Set environment variables
 ENV USER=${USER}
