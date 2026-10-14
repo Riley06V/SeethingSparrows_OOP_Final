@@ -1,0 +1,77 @@
+@startuml process
+' Seething Sparrows - Process View (4+1)
+' Activity diagram: the runtime flow of a play session, split into swimlanes
+' by which part of the program does each step. Names match the Scenario and
+' Development views (Game, Level Generator, Collision Handler, Pymunk Space).
+
+title Seething Sparrows — Process View (Activity Diagram)
+
+skinparam shadowing false
+
+|Player|
+start
+:Launch the program;
+
+|Game|
+:Open window, show level selector;
+
+|Player|
+:Select a level;
+
+|Level Generator|
+:Build level entities\n(birds, pigs, blocks);
+
+|Game|
+:Add entities to the Pymunk Space;
+
+repeat
+  |Player|
+  :Drag slingshot back and release;
+
+  |Game|
+  :Apply launch impulse to bird;
+
+  |Player|
+  if (Click mid-flight?) then (yes)
+    |Game|
+    :Activate bird ability\n(later feature);
+  else (no)
+  endif
+
+  |Pymunk Space|
+  repeat
+    :Step physics one frame\n(gravity, movement);
+    |Collision Handler|
+    :Detect collisions,\ndamage blocks and pigs;
+    |Game|
+    :Update score, render frame (60 FPS);
+    |Pymunk Space|
+  repeat while (Objects still moving?) is (yes)
+  ->no;
+
+  |Player|
+  if (Bad shot?) then (yes)
+    :Press Restart;
+    |Game|
+    :Reload current level;
+  else (no)
+  endif
+
+  |Game|
+repeat while (Pigs left AND birds left?) is (yes)
+->no;
+
+if (All pigs defeated?) then (yes)
+  :Level Complete, show score;
+  |Player|
+  :Continue to next level or exit;
+else (no)
+  |Game|
+  :Level Failed;
+  |Player|
+  :Retry level or exit;
+endif
+
+stop
+
+@enduml
