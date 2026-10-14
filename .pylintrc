@@ -1,0 +1,2 @@
+[MASTER]
+extension-pkg-allow-list=pygame,pymunk # to avoid pylint flagging pygame unnecessarily

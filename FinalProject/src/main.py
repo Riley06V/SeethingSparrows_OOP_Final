@@ -1,4 +1,4 @@
-""" Main game loop -- Mikel Kratzer 10/6"""
+"""Pymunk Ball Simulation -- Mikel Kratzer 10/13"""
 import os
 import pygame
 import pymunk
@@ -8,6 +8,7 @@ WIDTH, HEIGHT = 1280, 720
 
 
 def main():
+    """Main function: runs simulation and imports assets"""
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Seething Sparrows")
@@ -24,7 +25,7 @@ def main():
 
     # Physics space
     space = pymunk.Space()
-    space.gravity = (0.0, 980.0) # 980 px/s^2 vertically
+    space.gravity = (0.0, 980.0)  # 980 px/s^2 vertically
 
     # Enable sleeping so objects fully stop
     space.sleep_time_threshold = 0.5
