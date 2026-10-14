@@ -5,12 +5,12 @@ import pymunk
 
 
 class Object:
-    """Base class for all physics entities."""
+    """Base class for all objects"""
     def __init__(self, space, surface, radius):
-        self.radius = radius
+        self.radius = radius  # FIXME: this is for Balls only
 
-        # Pymunk physics setup
-        mass = 1
+        # Pymunk physics setup: need to define body and shape
+        mass = 1  # default
         moment = pymunk.moment_for_circle(mass, 0, radius)
         self.body = pymunk.Body(mass, moment)
         self.shape = pymunk.Circle(self.body, radius)
@@ -22,10 +22,12 @@ class Object:
         )
 
     def draw(self, screen):
-        """Draws the object using Pymunk's position and rotation smoothly."""
+        """Draws the object using Pymunk."""
         rotated_image = pygame.transform.rotate(self.base_image, math.degrees(-self.body.angle))
+        # image needs to rotate appropriately
         image_rect = rotated_image.get_rect()
         image_rect.center = (round(self.body.position[0]), round(self.body.position[1]))
+        # center image onto object
         screen.blit(rotated_image, image_rect)
 
 

@@ -1,0 +1,116 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+hide circle
+
+
+' --- Core Controllers (Lines 3-8) ---
+class Game {
+    - state: GameState
+    - slingshot: Slingshot
+    - level_generator: LevelGenerator
+    - physics_handler: PhysicsHandler
+    + update_pygame(): void
+    + check_state(): void
+    + render(): void
+}
+
+class Slingshot {
+    - max_radius: float
+    - appearance: png
+    - loaded_bird: Bird
+    + drag(): void
+    + release(): void
+}
+
+class Object {
+
+    - velocity: vector
+    - mass: float
+    - position: vector
+    - space: pymunk_space
+    - surface: screen
+    
+    
+}
+
+class Ball {
+
+    -radius: float
+    -elasticity: float
+}
+
+class Bird {
+    
+    - ability: string
+    - is_ability_used: bool
+    - appearance: png
+    + trigger_ability(physics: PhysicsHandler): void
+}
+
+class Pig {
+    - score: int
+    - hp: int
+    - image: png
+
+}
+
+class Rectangle {
+
+    - size: vector
+}
+class Block {
+    - durability: int
+    - hp: int
+    - appearance: png
+    - width: float
+    - height: float
+}
+
+class LevelGenerator {
+    + "uses iterator pattern"
+    + generate_level(level_id: int): Level
+}
+
+class Level {
+    + "uses factory pattern"
+    - background: png
+    - score: int
+    - pigs_remaining: int
+    - birds_remaining: int
+    - objects: list[GameObject]
+}
+
+
+
+' --- Physics Engine (Lines 19-22) ---
+class PhysicsHandler {
+    + "will use pymunk"
+    
+    + resolve_collisions(): void
+}
+
+
+
+' Game Control Flow
+Game "1" *-- "1" LevelGenerator : controls >
+LevelGenerator "1" --> "1" Level : creates and iterates >
+Level "1" *-- "1" Slingshot : contains >
+Slingshot o-- Bird : contains instance of >
+
+' Physics Interactions
+Level "1" *-- "1" PhysicsHandler : uses >
+PhysicsHandler ..> Object : updates >
+Level *-- Object : contains >
+
+' Inheritance Tree
+Object <|-- Ball
+Object <|-- Rectangle
+
+
+Ball <|-- Bird
+Ball <|-- Pig
+Rectangle <|-- Block
+
+
+@enduml
