@@ -1,4 +1,4 @@
-"""Pymunk Ball Simulation -- Mikel Kratzer 10/13"""
+"""Pymunk Ball Simulation"""
 import os
 import pygame
 import pymunk
@@ -8,7 +8,7 @@ WIDTH, HEIGHT = 1280, 720
 
 
 def main():
-    """Main function: runs simulation and imports assets"""
+    """Main function"""
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Seething Sparrows")
@@ -43,9 +43,8 @@ def main():
         wall.elasticity = 0.5
     space.add(static_body, *walls)
 
-    # Initial bird launch configuration
-    start_x, start_y = 150, 500
-    start_vx, start_vy = 600, -750
+    start_x, start_y = 150, 500  # initial bird position (about where the slingshot should be)
+    start_vx, start_vy = 600, -750  # initial vird velocity (negative y means upward)
     bird = Ball(space, start_x, start_y, start_vx, start_vy, bird_image, r=20, bounce=0.5)
 
     running = True
@@ -56,8 +55,8 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    # Reset bird position, velocity, angle, and wake it from sleep
+                if event.key == pygame.K_r:  # if user presses R key
+                    # Reset bird position, velocity, angle, and enable it to move again
                     bird.body.position = (start_x, start_y)
                     bird.body.velocity = (start_vx, start_vy)
                     bird.body.angular_velocity = 0
