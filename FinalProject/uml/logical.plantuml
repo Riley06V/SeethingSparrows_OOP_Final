@@ -3,13 +3,6 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 hide circle
 
-' --- Enums & States ---
-enum GameState {
-    MENU
-    AIMING
-    BIRD_FLYING
-    LEVEL_COMPLETE
-}
 
 ' --- Core Controllers (Lines 3-8) ---
 class Game {
@@ -22,97 +15,102 @@ class Game {
     + render(): void
 }
 
-class LevelGenerator {
-    + generate_level(level_id: int): Level
-}
-
-class Level {
-    - background: jpg
-    - score: int
-    - pigs_remaining: int
-    - objects: list[GameObject]
-}
-
 class Slingshot {
-    - appearance: jpg
+    - max_radius: float
+    - appearance: png
     - loaded_bird: Bird
     + drag(): void
     + release(): void
 }
 
-' --- Physics Engine (Lines 19-22) ---
-class PhysicsHandler {
-    - gravity: float
-    + apply_gravity(obj: GameObject): void
-    + resolve_collisions(): void
+class Object {
+
+    - velocity: vector
+    - mass: float
+    - position: vector
+    - space: pymunk_space
+    - surface: screen
+    
+    
 }
 
-' --- World Objects (Lines 9-17) ---
-abstract class GameObject {
-    - velocity: tuple
-    - mass: float
-    - acceloration: float
-    - physics_stuff: dict
+class Ball {
+
+    -radius: float
+    -elasticity: float
 }
 
 class Bird {
-    - radius: float
+    
     - ability: string
     - is_ability_used: bool
-    - appearance: jpg
+    - appearance: png
     + trigger_ability(physics: PhysicsHandler): void
 }
 
-abstract class Destructible {
-    - is_destructible: bool = true
-    - durability: int
-    - points: int
-    + take_damage(force: float): void
+class Pig {
+    - score: int
+    - hp: int
+    - image: png
+
 }
 
+class Rectangle {
+
+    - size: vector
+}
 class Block {
-    - appearance: jpg
+    - durability: int
+    - hp: int
+    - appearance: png
     - width: float
     - height: float
-    - material: Material
 }
 
-class Material {
-    - name: string
-    - durability_modifier: int
-    - point_value: int
-    - density: float
-    - mass: float
+class LevelGenerator {
+    + "uses iterator pattern"
+    + generate_level(level_id: int): Level
 }
 
-class Pig {
-    - radius: float
-    - pig_type: string
+class Level {
+    + "uses factory pattern"
+    - background: png
+    - score: int
+    - pigs_remaining: int
+    - birds_remaining: int
+    - objects: list[GameObject]
 }
 
-' --- Relationships & Connections ---
+
+
+' --- Physics Engine (Lines 19-22) ---
+class PhysicsHandler {
+    + "will use pymunk"
+    
+    + resolve_collisions(): void
+}
+
+
 
 ' Game Control Flow
 Game "1" *-- "1" LevelGenerator : controls >
-LevelGenerator "1" --> "1" Level : creates >
-Game "1" *-- "1" Slingshot : keeps >
+LevelGenerator "1" --> "1" Level : creates and iterates >
+Level "1" *-- "1" Slingshot : contains >
 Slingshot o-- Bird : contains instance of >
-Game --> GameState : tracks >
 
 ' Physics Interactions
-Game "1" *-- "1" PhysicsHandler : uses >
-PhysicsHandler ..> GameObject : talks to / updates >
-Bird ..> PhysicsHandler : talks to (for abilities) >
-Level *-- GameObject : contains >
+Level "1" *-- "1" PhysicsHandler : uses >
+PhysicsHandler ..> Object : updates >
+Level *-- Object : contains >
 
 ' Inheritance Tree
-GameObject <|-- Bird
-GameObject <|-- Destructible
+Object <|-- Ball
+Object <|-- Rectangle
 
-Destructible <|-- Pig
-Destructible <|-- Block
 
-' Composition
-Block *-- Material : determines stats >
+Ball <|-- Bird
+Ball <|-- Pig
+Rectangle <|-- Block
+
 
 @enduml
