@@ -54,7 +54,8 @@ create-docs: create-doc-folder
 
 .PHONY: create-uml
 create-uml: create-doc-folder
-ifeq ($(shell which java), )$(error "No java found in $(PATH). Install java to run plantuml")
+ifeq ($(shell which java), )
+	$(error "No java found in $(PATH). Install java to run plantuml")
 endif
 ifeq ($(wildcard ~/plantuml.jar), )
 	@echo "Downloading plantuml.jar in home folder..."
@@ -62,8 +63,9 @@ ifeq ($(wildcard ~/plantuml.jar), )
 	sudo apt install graphviz
 endif
 	@echo "Creating UML diagrams..."
-	@for umlfile in $(UMLFILES); do \ 	echo "Processing $$umlfile..."; \
-		$(PLANTUML)$$umlfile; \
+	@for umlfile in $(UMLFILES); do \
+		echo "Processing $$umlfile..."; \
+		java -jar ~/plantuml.jar $$umlfile; \
 	done
 	@echo "UML diagrams created and saved in uml folder"
 
