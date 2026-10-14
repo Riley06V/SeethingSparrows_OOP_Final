@@ -5,18 +5,25 @@ title Seething Sparrows — Development View
 package "src/" {
     [main.py] --> [game.py] : initializes singleton game
     [game.py] --> [level_generator.py] : uses iterator pattern
-    [game.py] --> [collision_handler.py] : processes collisions & slingshot
+    [game.py] --> [collision_handler.py] : processes collisions and slingshot
     [level_generator.py] --> [objects.py] : uses factory pattern for entities
     [collision_handler.py] --> [objects.py] : updates object states
+}
+
+package "tests/" {
+    [Unit & Mock Tests] --> [src/] : tests modules
+    [Property-Based Tests] --> [src/] : tests using hypothesis
 }
 
 package "External Libraries" {
     [pygame]
     [pymunk]
+    [hypothesis]
 }
 
 [game.py] --> [pygame] : manages loop, window & rendering
 [objects.py] --> [pymunk] : wraps pymunk bodies & shapes
 [collision_handler.py] --> [pymunk] : handles physics collisions & space
+[Property-Based Tests] --> [hypothesis] : state and input testing
 
 @enduml
