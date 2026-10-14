@@ -1,0 +1,118 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+hide circle
+
+' --- Enums & States ---
+enum GameState {
+    MENU
+    AIMING
+    BIRD_FLYING
+    LEVEL_COMPLETE
+}
+
+' --- Core Controllers (Lines 3-8) ---
+class Game {
+    - state: GameState
+    - slingshot: Slingshot
+    - level_generator: LevelGenerator
+    - physics_handler: PhysicsHandler
+    + update_pygame(): void
+    + check_state(): void
+    + render(): void
+}
+
+class LevelGenerator {
+    + generate_level(level_id: int): Level
+}
+
+class Level {
+    - background: jpg
+    - score: int
+    - pigs_remaining: int
+    - objects: list[GameObject]
+}
+
+class Slingshot {
+    - appearance: jpg
+    - loaded_bird: Bird
+    + drag(): void
+    + release(): void
+}
+
+' --- Physics Engine (Lines 19-22) ---
+class PhysicsHandler {
+    - gravity: float
+    + apply_gravity(obj: GameObject): void
+    + resolve_collisions(): void
+}
+
+' --- World Objects (Lines 9-17) ---
+abstract class GameObject {
+    - velocity: tuple
+    - mass: float
+    - acceloration: float
+    - physics_stuff: dict
+}
+
+class Bird {
+    - radius: float
+    - ability: string
+    - is_ability_used: bool
+    - appearance: jpg
+    + trigger_ability(physics: PhysicsHandler): void
+}
+
+abstract class Destructible {
+    - is_destructible: bool = true
+    - durability: int
+    - points: int
+    + take_damage(force: float): void
+}
+
+class Block {
+    - appearance: jpg
+    - width: float
+    - height: float
+    - material: Material
+}
+
+class Material {
+    - name: string
+    - durability_modifier: int
+    - point_value: int
+    - density: float
+    - mass: float
+}
+
+class Pig {
+    - radius: float
+    - pig_type: string
+}
+
+' --- Relationships & Connections ---
+
+' Game Control Flow
+Game "1" *-- "1" LevelGenerator : controls >
+LevelGenerator "1" --> "1" Level : creates >
+Game "1" *-- "1" Slingshot : keeps >
+Slingshot o-- Bird : contains instance of >
+Game --> GameState : tracks >
+
+' Physics Interactions
+Game "1" *-- "1" PhysicsHandler : uses >
+PhysicsHandler ..> GameObject : talks to / updates >
+Bird ..> PhysicsHandler : talks to (for abilities) >
+Level *-- GameObject : contains >
+
+' Inheritance Tree
+GameObject <|-- Bird
+GameObject <|-- Destructible
+
+Destructible <|-- Pig
+Destructible <|-- Block
+
+' Composition
+Block *-- Material : determines stats >
+
+@enduml
