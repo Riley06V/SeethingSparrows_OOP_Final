@@ -1,0 +1,35 @@
+@startuml scenario
+' Seething Sparrows - Scenario View (4+1)
+' 
+title Seething Sparrows — Scenario View
+
+actor User
+participant "Game\n(Singleton)" as Game
+participant "Level Generator\n(Iterator)" as Level
+participant "Collision Handler" as Collisions
+participant "Ball\n(Object)" as Bird
+participant "Pymunk Space" as Space
+
+User -> Game: Initializes game
+Game -> Level: Request first level
+Level --> Game: Yield level entities
+
+loop Each Level
+    User -> Game: Drag & release slingshot
+    Game -> Bird: Apply impulse from slingshot
+    Bird -> Space: Update physics body
+
+    loop Game Loop (60 FPS)
+        Game -> Space: space.step(dt)
+        Space --> Collisions: Detect collision
+        Collisions -> Bird: Update velocity, position
+        Collisions -> Game: Update score & check win
+        Game --> User: Render the next frame
+    end
+
+    User -> Game: Selects next level or retry
+    Game -> Level: Request next level
+    Level --> Game: Yield next level entities
+end
+
+@enduml
