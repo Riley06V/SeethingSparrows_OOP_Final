@@ -1,0 +1,50 @@
+@startuml physical
+' Seething Sparrows - Physical View (4+1)
+' Deployment diagram: which machine runs which part of the software.
+
+title Seething Sparrows — Physical View (Deployment Diagram)
+
+skinparam shadowing false
+left to right direction
+
+node "Developer's PC (Windows)" <<device>> as DevPC {
+  node "VS Code" <<IDE>> as VSCode
+  node "Docker Desktop" <<execution environment>> {
+    node "seething-sparrows container\n(python:3.14)" <<container>> as Container {
+      artifact "FinalProject/ source\n(repo folder)" as Src
+      artifact "FinalProject/Makefile\nflake8 / mypy / pytest / hypothesis" as Checks
+      artifact "plantuml.jar + graphviz\n(make create-uml)" as Uml
+    }
+  }
+  artifact "git + hooks" as Git
+}
+
+node "Player's PC (Windows)" <<device>> as PlayerPC {
+  node "Python 3.14 venv" <<execution environment>> {
+    artifact "FinalProject/src\n(main.py, objects.py)" as Game
+    artifact "pygame + pymunk" as Libs
+  }
+  folder "FinalProject/assets/\n(sprites, background)" as Data
+}
+
+cloud "GitHub" {
+  database "SeethingSparrows_OOP_Final\nrepository" as Repo
+  node "GitHub Actions runner\n(ubuntu-latest)" <<execution environment>> as Runner {
+    artifact "ci-test.yml\n(lint, type check, tests)" as CI
+  }
+}
+
+VSCode --> Container : attaches to
+Git --> Repo : push / pull (HTTPS)
+Repo --> Runner : triggers CI on push / PR
+Repo --> PlayerPC : git clone
+Game ..> Libs : imports
+Game ..> Data : loads images
+
+note left of PlayerPC
+  Usually the same laptop as the
+  developer's PC. The game window
+  only opens here, not in Docker.
+end note
+
+@enduml
