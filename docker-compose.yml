@@ -8,6 +8,8 @@ services:
     container_name: ${CONTAINER_NAME}
     environment:
       - REPO_NAME=${REPO_NAME}
+      - DISPLAY=:0
+      - SDL_VIDEODRIVER=x11
     working_dir: /home/user/${REPO_NAME}
     volumes:
       - ./:/home/user/${REPO_NAME}
@@ -15,6 +17,7 @@ services:
       - ${HOME}/.ssh:/home/user/.ssh
       - ${HOME}/.zsh_history:/home/user/.zsh_history
       - ${HOME}/.kattisrc:/home/user/.kattisrc
+      - /mnt/wslg/.X11-unix:/tmp/.X11-unix
     cap_add:
       - ALL
     privileged: true # Grant full privileges to the container
