@@ -3,6 +3,38 @@ import math
 import pygame
 import pymunk
 
+class Block_Object:
+    """Base class for CUBE"""
+    def __init__(self, space, surface, radius):
+        self.radius = radius  # FIXME: this is for Balls only
+
+        size = 20
+        mass = 0.5
+        moment = pymunk.moment_for_box(mass, (size, size))
+        self.body = pymunk.Body(mass, moment)
+        self.shape = pymunk.Poly.create_box(self.body, (size, size))
+        self.shape.friction = 0.3
+        space.add(self.body, self.shape)
+        # Pymunk physics setup: need to define body and shape
+        # mass = 1  # default
+        # moment = pymunk.moment_for_circle(mass, 0, radius)
+        # self.body = pymunk.Body(mass, moment)
+        # self.shape = pymunk.Circle(self.body, radius)
+        # space.add(self.body, self.shape)
+
+        #Prepare surface image
+        self.base_image = pygame.transform.scale(
+            surface.convert_alpha(), (int(2 * size), int(2 * size))
+        )
+    def draw(self, screen):
+        """Draws the object using Pymunk."""
+        rotated_image = pygame.transform.rotate(self.base_image, math.degrees(-self.body.angle))
+        # image needs to rotate appropriately
+        image_rect = rotated_image.get_rect()
+        image_rect.center = (round(self.body.position[0]), round(self.body.position[1]))
+        # center image onto object
+        screen.blit(rotated_image, image_rect)
+
 
 class Object:
     """Base class for all objects"""
@@ -39,3 +71,11 @@ class Ball(Object):
         self.body.velocity = (v_x, v_y)
         self.shape.elasticity = bounce
         self.shape.friction = 0.5
+
+class Block(Block_Object):
+    def __init__(self, space, x, y, v_x, v_y, surface,r,bounce):
+        super().__init__(space, surface, r)
+        self.body.position = (x, y)
+        self.body.velocity = (v_x, v_y)
+        self.shape.elasticity = bounce
+        self.shape.friction = 0.8
