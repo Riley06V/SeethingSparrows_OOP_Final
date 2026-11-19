@@ -5,6 +5,7 @@ import pygame
 import pymunk
 
 from objects import Ball, Block
+from slingshot import Slingshot
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -12,6 +13,7 @@ WIDTH, HEIGHT = 1280, 720
 def main():
     """Main function."""
 
+    # Initialize screen and clock
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Seething Sparrows")
@@ -36,25 +38,24 @@ def main():
 
     # Boundaries
     static_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-
     walls = [
         pymunk.Segment(static_body, (0, HEIGHT), (WIDTH, HEIGHT), 5),  # ceiling
         pymunk.Segment(static_body, (0, 0), (WIDTH, 0), 5),  # floor
         pymunk.Segment(static_body, (0, 0), (0, HEIGHT), 5),  # left wall
         pymunk.Segment(static_body, (WIDTH, 0), (WIDTH, HEIGHT), 5)  # right wall
     ]
-
     for wall in walls:
         wall.friction = 0.5
         wall.elasticity = 0.5
-
     space.add(static_body, *walls)
 
     # Create objects (different for each level)
-    bird = Ball(space, 150, 500, 600, -750, bird_image, radius=20, bounce=0.5)
+    bird = Ball(space, 150, 500, 0, 0, bird_image, radius=20, bounce=0.5)
     block = Block(space, 900, 650, 0, 0, block_image, size=60, bounce=0.5)
     block2 = Block(space, 900, 550, 0, 0, block_image, size=60, bounce=0.5)
     object_list = [bird, block, block2]  # list all objects
+
+    slingshot = Slingshot(space, bird, 150, 500)  # create slingshot
 
     running = True
 
@@ -68,18 +69,20 @@ def main():
                 running = False
 
             elif event.type == pygame.KEYDOWN:
-
                 if event.key == pygame.K_r:
                     # Reset all objects
+                    slingshot.reset()
                     for obj in object_list:
                         obj.reset()
 
+            slingshot.handle_event(event)
         # Update physics
         space.step(dt)
 
         # Rendering
         screen.blit(background, (0, 0))
 
+        slingshot.draw(screen)
         for obj in object_list:
             obj.draw(screen)
 
