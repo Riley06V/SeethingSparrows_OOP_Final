@@ -6,6 +6,8 @@ import pymunk
 
 from objects import Ball, Block
 from slingshot import Slingshot
+from level_factory import Factory
+from level import Level
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -48,14 +50,16 @@ def main():
         wall.friction = 0.5
         wall.elasticity = 0.5
     space.add(static_body, *walls)
-
+    factory = Factory()
+    level = factory.create_level(space,1)
     # Create objects (different for each level)
-    bird = Ball(space, 150, 500, 0, 0, bird_image, radius=20, bounce=0.5)
-    block = Block(space, 900, 650, 0, 0, block_image, size=60, bounce=0.5)
-    block2 = Block(space, 900, 550, 0, 0, block_image, size=60, bounce=0.5)
-    object_list = [bird, block, block2]  # list all objects
+    
+    # bird = Ball(space, 150, 500, 0, 0, bird_image, radius=20, bounce=0.5)
+    # block = Block(space, 900, 650, 0, 0, block_image, size=60, bounce=0.5)
+    # block2 = Block(space, 900, 550, 0, 0, block_image, size=60, bounce=0.5)
+    # object_list = [bird, block, block2]  # list all objects
 
-    slingshot = Slingshot(space, bird, 150, 500)  # create slingshot
+    slingshot = Slingshot(space, level.birds, 150, 500)  # create slingshot
 
     running = True
 
@@ -72,8 +76,12 @@ def main():
                 if event.key == pygame.K_r:
                     # Reset all objects
                     slingshot.reset()
-                    for obj in object_list:
+                    for obj in level.objects:
                         obj.reset()
+                    for bird in level.birds:
+                        bird.reset()
+                    for pig in level.pigs:
+                        pig.reset()
 
             slingshot.handle_event(event)
         # Update physics
@@ -83,8 +91,12 @@ def main():
         screen.blit(background, (0, 0))
 
         slingshot.draw(screen)
-        for obj in object_list:
+        for obj in level.objects:
             obj.draw(screen)
+        for bird in level.birds:
+            bird.draw(screen)
+        for pig in level.pigs:
+            pig.draw(screen)
 
         pygame.display.flip()
 
