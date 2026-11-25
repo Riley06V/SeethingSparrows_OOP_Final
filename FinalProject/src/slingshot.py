@@ -9,7 +9,7 @@ class Slingshot:
 
     def __init__(self, space, bird, x, y, max_drag=100, launch_multiplier=10):
         self.space = space
-        self.bird = bird
+        self.bird = bird[0]
         self.position = pymunk.Vec2d(x, y)
 
         self.max_drag = max_drag
