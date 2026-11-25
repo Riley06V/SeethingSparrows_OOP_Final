@@ -76,12 +76,13 @@ def main():
                 if event.key == pygame.K_r:
                     # Reset all objects
                     slingshot.reset()
-                    for obj in level.objects:
-                        obj.reset()
-                    for bird in level.birds:
-                        bird.reset()
-                    for pig in level.pigs:
-                        pig.reset()
+                    level.reset()
+                    # for obj in level.objects:
+                    #     obj.reset()
+                    # for bird in level.birds:
+                    #     bird.reset()
+                    # for pig in level.pigs:
+                    #     pig.reset()
 
             slingshot.handle_event(event)
         # Update physics

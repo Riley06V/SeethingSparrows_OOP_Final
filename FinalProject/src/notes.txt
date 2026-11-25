@@ -1,0 +1,4 @@
+Put reset function in level class
+change slingshot code to not need to constantly access the zero'th bird make it cleaner
+temp terminal state when bird stops moving, can use Main's sleep time threshold
+after terminal state make the switch from level 1 to two and make sure that works

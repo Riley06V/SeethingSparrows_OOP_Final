@@ -42,10 +42,10 @@ class Factory:
             bird = Ball(space, 150, 500, 0, 0, bird_image, radius=20, bounce=0.5)
             bird2 = Ball(space, 15, 50, 0, 0, bird_image, radius=20, bounce=0.5)
             
-            stone = Block(space, 500, 450, 0, 0, block_image, size=60, bounce=0.1)
-            stone2 = Block(space, 500, 350, 0, 0, block_image, size=60, bounce=0.1)
-            stone3 = Block(space, 500, 250, 0, 0, block_image, size=60, bounce=0.1)
-            stone4 = Block(space, 500, 150, 0, 0, block_image, size=60, bounce=0.1)
+            stone = Block(space, 500, 450, 0, 0, block_image, size=60, bounce=0)
+            stone2 = Block(space, 500, 350, 0, 0, block_image, size=60, bounce=0)
+            stone3 = Block(space, 500, 250, 0, 0, block_image, size=60, bounce=0)
+            stone4 = Block(space, 500, 150, 0, 0, block_image, size=60, bounce=0)
 
             glass = Block(space, 600, 450, 0, 0, glass_image, size=70, bounce=0.1)
             glass2 = Block(space, 600, 350, 0, 0, glass_image, size=70, bounce=0.1)
@@ -53,15 +53,15 @@ class Factory:
             glass4 = Block(space, 600, 300, 0, 0, glass_image, size=70, bounce=0.1)
             glass5 = Block(space, 600, 650, 0, 0, glass_image, size=70, bounce=0.1)
 
-            wood = Block(space, 700, 450, 0, 0, wood_image, size=70, bounce=0.1)
-            wood2 = Block(space, 700, 350, 0, 0, wood_image, size=70, bounce=0.1)
-            wood3 = Block(space, 700, 325, 0, 0, wood_image, size=70, bounce=0.1)
-            wood4 = Block(space, 700, 300, 0, 0, wood_image, size=70, bounce=0.1)
-            wood5 = Block(space, 700, 275, 0, 0, wood_image, size=70, bounce=0.1)
-            wood6 = Block(space, 700, 250, 0, 0, wood_image, size=70, bounce=0.1)
-            wood7 = Block(space, 700, 225, 0, 0, wood_image, size=70, bounce=0.1)
-            wood8 = Block(space, 700, 200, 0, 0, wood_image, size=70, bounce=0.1)
-            fake_pig = Ball(space, 600, 140,0,0,pig_image, radius=20, bounce=0.5)
+            wood = Block(space, 700, 450, 0, 0, wood_image, size=70, bounce=0)
+            wood2 = Block(space, 700, 350, 0, 0, wood_image, size=70, bounce=0)
+            wood3 = Block(space, 700, 325, 0, 0, wood_image, size=70, bounce=0)
+            wood4 = Block(space, 700, 300, 0, 0, wood_image, size=70, bounce=0)
+            wood5 = Block(space, 700, 275, 0, 0, wood_image, size=70, bounce=0)
+            wood6 = Block(space, 700, 250, 0, 0, wood_image, size=70, bounce=0)
+            wood7 = Block(space, 700, 225, 0, 0, wood_image, size=70, bounce=0)
+            wood8 = Block(space, 700, 200, 0, 0, wood_image, size=70, bounce=0)
+            fake_pig = Ball(space, 600, 140,0,0,pig_image, radius=20, bounce=0.1)
 
             block_list = [stone,stone2,stone3,stone4,glass,glass2,glass3,glass4,glass5,wood,wood2,wood3,wood4,wood5,wood6
                           ,wood7,wood8]
