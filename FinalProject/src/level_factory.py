@@ -31,7 +31,7 @@ class Factory:
         if number == 1:
             print("base level")
             block_list = []
-            level_one = Level([],0,[],[])
+            level_one = Level([],0,[],[],[])
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             assets_dir = os.path.join(base_dir, "assets")
             bird_image = pygame.image.load(os.path.join(assets_dir, "red_bird.png"))

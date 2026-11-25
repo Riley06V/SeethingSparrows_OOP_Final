@@ -33,11 +33,13 @@ class Level:
 
     
 
-    def check_terminal(self) -> bool:
-        if not self.birds:
+    def check_terminal(self, space) -> bool:
+        if self.birds and self.birds[0].body.is_sleeping:
+            print("Bird is asleep - terminal condition met!")
             return True
+        return False
         
-    def reset(self) -> None:
+    def reset_stuff(self) -> None:
     
         for obj in self.objects:
             obj.reset()
@@ -45,3 +47,11 @@ class Level:
             bird.reset()
         for pig in self.pigs:
             pig.reset()
+
+    def draw_level(self, screen) -> None:
+        for obj in self.objects:
+            obj.draw(screen)
+        for bird in self.birds:
+            bird.draw(screen)
+        for pig in self.pigs:
+            pig.draw(screen)

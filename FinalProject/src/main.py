@@ -65,7 +65,7 @@ def main():
 
     while running:
         dt = clock.tick(60) / 1000
-
+        
         # Event handling
         for event in pygame.event.get():
 
@@ -76,29 +76,39 @@ def main():
                 if event.key == pygame.K_r:
                     # Reset all objects
                     slingshot.reset()
-                    level.reset()
+                    level.reset_stuff()
                     # for obj in level.objects:
                     #     obj.reset()
                     # for bird in level.birds:
                     #     bird.reset()
                     # for pig in level.pigs:
                     #     pig.reset()
-
             slingshot.handle_event(event)
+            
+
+            
         # Update physics
         space.step(dt)
-
+        if level.check_terminal(space):
+                slingshot.reset()
+                level.reset_stuff()
+                running = False
+                pygame.quit()
+                exit()
+            
         # Rendering
         screen.blit(background, (0, 0))
 
         slingshot.draw(screen)
-        for obj in level.objects:
-            obj.draw(screen)
-        for bird in level.birds:
-            bird.draw(screen)
-        for pig in level.pigs:
-            pig.draw(screen)
-
+        level.draw_level(screen)
+        
+        # for obj in level.objects:
+        #     obj.draw(screen)
+        # for bird in level.birds:
+        #     bird.draw(screen)
+        # for pig in level.pigs:
+        #     pig.draw(screen)
+        
         pygame.display.flip()
 
     pygame.quit()
