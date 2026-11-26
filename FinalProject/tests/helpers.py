@@ -12,8 +12,10 @@ import os
 
 import pygame
 
-# no real window during tests (CI doesn't have a screen)
-os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
+# no real window or sound during tests (the container and CI don't have a screen)
+# has to overwrite, since docker-compose sets SDL_VIDEODRIVER=x11
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+os.environ["SDL_AUDIODRIVER"] = "dummy"
 
 
 def start_pygame() -> None:
