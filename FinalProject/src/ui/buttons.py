@@ -6,8 +6,7 @@
     HoverGrow(PressDown(Button(...)))
 
 Each wrapper has the same interface as a Button (``Clickable``), so the menu
-never needs to know which extras a button has. Like stacking enchantments
-on one sword instead of crafting a new sword for every combination.
+never needs to know which extras a button has. 
 """
 
 from __future__ import annotations

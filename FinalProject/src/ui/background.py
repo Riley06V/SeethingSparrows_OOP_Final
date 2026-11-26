@@ -38,10 +38,10 @@ class Background:
         # Two underscores = private (name mangling): outside code can't
         # change these by accident. They're read through the properties below.
         self.__size: tuple[int, int] = size
-        # True only if we were given a path AND that file is really there.
+        # True only if a path was given AND that file is really there.
         self.__from_file: bool = image_path is not None and image_path.exists()
         if self.__from_file:
-            # mypy can't tell image_path isn't None here, so we promise it.
+            # mypy can't tell image_path isn't None here, so I promise it.
             assert image_path is not None
             # .convert() changes the picture to the screen's pixel format,
             # which makes drawing it every frame much faster.
@@ -68,7 +68,7 @@ class Background:
         """Blend two colors; t=0 gives a, t=1 gives b."""
         # "lerp" = linear interpolation = sliding between two values.
         # t=0 -> all a, t=0.5 -> halfway, t=1 -> all b.
-        # min/max clamp t into 0..1 so we never go past either color.
+        # min/max clamp t into 0..1 so it never goes past either color.
         t = min(max(t, 0.0), 1.0)
         # For each channel: start at a, then move t of the way toward b.
         # e.g. a=100, b=200, t=0.25 -> 100 + (200-100)*0.25 = 125

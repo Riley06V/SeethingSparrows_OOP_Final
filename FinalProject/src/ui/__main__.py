@@ -7,5 +7,5 @@ main.py, which Jason's level branch is still editing.
 
 from ui.game import Game
 
-if __name__ == "__main__":  
+if __name__ == "__main__":  # pragma: no cover
     Game().run()  
