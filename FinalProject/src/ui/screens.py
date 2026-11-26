@@ -19,8 +19,8 @@ if TYPE_CHECKING:  # pragma: no cover - type hints only
 class Screen(ABC):
     """One state of the game, run by the Game manager.
 
-    Like a game mode in a shooter (lobby, match, killcam): only one is in
-    control at a time, and the Game switches between them.
+    Only one screen is in control at a time, and the Game
+    switches between them.
     """
 
     def __init__(self, game: Game) -> None:

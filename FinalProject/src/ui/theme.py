@@ -45,7 +45,6 @@ GRAY: Color = (170, 170, 178)       # equal R/G/B = gray; used for disabled butt
 GRAY_LIP: Color = (130, 130, 140)   # darker gray for a disabled button's lip
 
 
-
 @lru_cache(maxsize=None)  # remember every font size we've loaded (no limit)
 def font(size: int) -> pygame.font.Font:
     """Return the game font at a size (cached, so each size loads once).

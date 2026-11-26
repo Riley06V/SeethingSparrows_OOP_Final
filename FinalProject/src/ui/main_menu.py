@@ -102,7 +102,7 @@ class MainMenuScreen(Screen):
             assert self.__focus is not None  # promise for mypy
             here: int = usable.index(self.__focus)  # position within `usable`
             # % wraps around: going down from the last button returns to
-            # the first, like scrolling past the end of a hotbar.
+            # the first one.
             self.__focus = usable[(here + step) % len(usable)]
         # Highlight only the focused button; un-highlight the rest.
         for i, button in enumerate(self.__buttons):
