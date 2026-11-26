@@ -7,7 +7,7 @@ from __future__ import annotations
 __author__ = "Riley Valdez"
 __date__ = "2026/11/25"
 __license__ = "MIT"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __maintainer__ = "Riley Valdez"
 
 from typing import TYPE_CHECKING
@@ -16,8 +16,9 @@ import pygame
 import pymunk
 
 from ui import theme
+from ui.hud import Hud
+from ui.pause_screen import PauseScreen
 from ui.screens import Screen
-# Jason's and Mikel's classes live in src/, so no "ui." on these
 from level import Level
 from level_factory import Factory
 from slingshot import Slingshot
@@ -52,6 +53,7 @@ class PlayingScreen(Screen):
         # Mikel's slingshot takes the list of birds and loads the first one
         self.__slingshot = Slingshot(self.__space, self.__level.birds, *self.SLING_POS)
         self.__finished: bool = False  # True once the level's end check passes
+        self.__hud = Hud(self.pause, self.restart)  # pause + reset buttons, top-left
 
     @property
     def level_number(self) -> int:
@@ -93,6 +95,15 @@ class PlayingScreen(Screen):
             wall.elasticity = 0.5  # how bouncy
         self.__space.add(static_body, *walls)
 
+    @property
+    def hud(self) -> Hud:
+        """The pause and reset buttons."""
+        return self.__hud
+
+    def pause(self) -> None:
+        """Put the pause card on top. The level stops updating under it."""
+        self.game.push(PauseScreen(self.game, self))
+
     def restart(self) -> None:
         """Put everything back where the level started."""
         self.__slingshot.reset()
@@ -100,13 +111,17 @@ class PlayingScreen(Screen):
         self.__finished = False
 
     def handle_event(self, event: pygame.event.Event) -> None:
-        """R restarts, Esc goes to the menu, mouse goes to the slingshot."""
+        """R restarts, Esc pauses, HUD buttons first, then the slingshot."""
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
                 self.restart()
             elif event.key == pygame.K_ESCAPE:
-                self.game.show_main_menu()  # for now, the pause screen replaces this later
+                self.pause()
                 return
+        if self.__hud.handle_event(event):
+            return  # a HUD button got clicked, don't also aim the slingshot
+        if event.type == pygame.MOUSEBUTTONDOWN and self.__hud.covers(event.pos):
+            return  # pressing on a HUD button shouldn't grab the bird
         self.__slingshot.handle_event(event)
 
     def update(self, dt: float) -> None:
@@ -117,7 +132,8 @@ class PlayingScreen(Screen):
             self.__finished = True
 
     def draw(self, surface: pygame.Surface) -> None:
-        """Background, slingshot, then everything in the level."""
+        """Background, slingshot, everything in the level, then the HUD on top."""
         surface.blit(self.__background, (0, 0))
         self.__slingshot.draw(surface)
         self.__level.draw_level(surface)
+        self.__hud.draw(surface)
